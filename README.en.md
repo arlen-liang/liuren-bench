@@ -16,11 +16,13 @@ A judge is whoever makes a call: a person, or a *model + harness + skill* combin
 
 ## Tracks
 
-**Live cases: call it first, score it later.** This is the main event. Anyone can submit a real question in two steps: the time of casting, the question and a falsifiable call (yes/no, time window, confidence) *before* the outcome is known, then what actually happened. Calls can't be edited after submission; CI enforces it. Late submissions are accepted but flagged as hindsight and excluded from stats.
+**Live cases: call it first, score it later.** This is the main event. One real question per GitHub issue: the time of casting, the question, a deadline and a falsifiable call (yes/no, time window, confidence), then later the outcome as a reply. A bot immediately replies with a seal: the full chart, engine version, the call verbatim and the server timestamp. Later edits or deleted replies don't change what was sealed. Calls sealed after the outcome happened are flagged as hindsight and excluded from stats.
 
-You don't need to know Da Liu Ren. Ask the question, let AI make the call, come back to report the outcome. Several AIs can call the same question, which makes it a head-to-head. Because calls are sealed before the outcome exists, no model can have seen the answer in training. The project takes no position on whether Da Liu Ren works. It just keeps score.
+You don't need to know Da Liu Ren. Ask the question, let AI make the call, come back to report the outcome. Several AIs can call the same question in the same issue, which makes it a head-to-head.
 
-**Official skill.** The repo will ship a skill you install into your own AI. It casts the chart with `core/` so the fixed half isn't guessed, guides the model to a falsifiable call, fills in the judge declaration, and submits only after you confirm: via `gh` if available, otherwise as a prefilled issue link. Submissions go through your own GitHub account; there is no public API.
+Be clear about what this ledger is: AI calls are submitted by users, the model is self-reported, and nothing stops someone from rerolling ten times and submitting the one they like. It is for fun and for seeing what people use, not a rigorous model benchmark; the casting and judgement tracks are, since they run every model under the same script. The project takes no position on whether Da Liu Ren works. It just keeps score.
+
+**Web page and official skill.** The web page is for people who use chat apps: enter the time and question, get the chart and a prompt to paste into any AI, paste the answer back, and get a prefilled issue link. The skill is for agent users (Claude Code, opencode, …): it casts with `core/`, follows a reading method sourced from 《六壬大全》, asks you to confirm the judge declaration, and submits only after you confirm. Both need a GitHub account; there is no public API.
 
 **Casting.** Given a moment, cast the chart; graded item by item. Two leaderboards: bare (no tools) and agent (tools allowed, but no existing chart libraries, including this project's `core/`).
 
@@ -32,13 +34,16 @@ You don't need to know Da Liu Ren. Ask the question, let AI make the call, come 
 
 ```
 core/           casting engine: time → chart (MIT)
-skill/          official skill: cast, call, submit (MIT, planned)
+bot/            live-case bot: sealing and export (MIT, in progress)
+web/            web page (MIT, planned)
+skill/          official skill and reading method (MIT, planned)
 bench/          question generation, scoring, leaderboards (MIT, planned)
 cases/
   classical/    classical cases (CC-BY-4.0)
-  live/         live cases, one file each, called then scored (CC-BY-4.0)
-docs/           rule audit, chart data format
+docs/           rule audit, data formats
 ```
+
+Live cases live in issues labelled `live-case`. A daily export goes to the history-less `data` branch (CC-BY-4.0): delete an issue and it disappears from the next export.
 
 ## Roadmap
 
@@ -52,7 +57,7 @@ Most wanted: let your AI call a real question and come back to score it. People 
 
 "Ground truth" is only true within one school. The engine follows 《六壬大全》, the one classic available in full text for line-by-line checking, with known disagreements configurable.
 
-Judge declarations are self-reported and can't be verified. Stats are grouped by declaration and labelled as such.
+Judge declarations and outcomes are self-reported and can't be verified. Submitting a live case requires a GitHub account, which is unreliable to reach from mainland China; that cuts against inviting casual users, and there's no good fix yet.
 
 Classical cases are survivor-biased and famous ones may be in training data. Live cases fix the first problem but bring their own: people who bother to submit probably already lean towards believing in it.
 

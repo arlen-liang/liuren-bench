@@ -1,0 +1,20 @@
+[project]
+name = "liuren-bot"
+version = "0.1.0"
+description = "liuren-bench 实占库：issue 封存与数据导出"
+requires-python = ">=3.10"
+license = "MIT"
+dependencies = ["liuren-core", "pyyaml>=6"]
+
+[dependency-groups]
+dev = ["pytest>=8", "jsonschema>=4"]
+
+[tool.uv.sources]
+liuren-core = { path = "../core", editable = true }
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["liuren_bot"]

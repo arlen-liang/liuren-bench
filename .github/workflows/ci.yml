@@ -28,7 +28,7 @@ jobs:
         run: /tmp/gitleaks detect --source . --redact --verbose
 
   test:
-    name: core tests
+    name: tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -38,7 +38,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install
-        run: pip install ./core pytest jsonschema
+        run: pip install ./core ./bot pytest jsonschema
 
       - name: Run tests
-        run: pytest -q core/tests
+        run: pytest -q core/tests bot/tests

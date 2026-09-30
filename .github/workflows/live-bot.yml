@@ -1,0 +1,41 @@
+name: live-bot
+
+# 实占库封存机器人：issue 开立或有人回复时，立即封存。
+# 用户输入只经 $GITHUB_EVENT_PATH 交给 Python，不在任何 run 步骤里展开。
+
+on:
+  issues:
+    types: [opened, labeled]
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+  contents: read
+
+concurrency:
+  group: live-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  seal:
+    if: >-
+      contains(github.event.issue.labels.*.name, 'live-case') &&
+      !github.event.issue.pull_request &&
+      (github.event_name != 'issues' || github.event.action == 'opened' || github.event.label.name == 'live-case') &&
+      (github.event_name != 'issue_comment' || github.event.comment.user.type != 'Bot')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install ./core ./bot
+
+      - name: Seal
+        run: python -m liuren_bot seal
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

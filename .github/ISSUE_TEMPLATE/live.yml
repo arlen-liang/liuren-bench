@@ -1,44 +1,58 @@
 name: 实占下注
-description: 在这里下注，维护者帮你转成 cases/live/ 里的文件。以 issue 创建时间为下注时间
-title: "[下注] 起课日期：占事一句话"
+description: 一个问题开一个 issue。机器人会立即封存课盘与断语，以服务器时刻为下注时间
+title: "[实占] 占事一句话"
 labels: ["live-case"]
 body:
   - type: checkboxes
-    id: privacy
+    id: consent
     attributes:
-      label: 隐私确认
+      label: 确认
       options:
         - label: 这是我自己的事；或者涉及别人，但别人看了认不出是谁
           required: true
         - label: 没有真名、单位名、具体地址，不涉及未成年人
           required: true
-        - label: 内容我自己看过（由 AI 代填的也一样）
+        - label: 内容我自己看过（由 AI 或网页代填的也一样）
           required: true
-        - label: 结果还没出来（出来了也能交，但会标"马后炮"，不进统计）
+        - label: 同意公开，并按 CC-BY-4.0 发布
           required: true
   - type: input
     id: time
     attributes:
       label: 起课时间
-      description: 北京时间，精确到分钟。用真太阳时的写上城市
+      description: 北京时间，格式 2026-10-08 14:20。须在开 issue 之前 24 小时以内
     validations:
       required: true
   - type: input
     id: question
     attributes:
       label: 占事
-      description: 一句话，比如"本周五前能否收到面试回复"
+      description: 一句话，写成事后能判成不成的样子，比如"本周五前能否收到面试回复（邮件或电话都算）"
     validations:
       required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: 类别
+      options: [求职, 工作, 财运, 感情, 健康（仅限本人）, 出行, 失物, 考试, 其他]
+    validations:
+      required: true
+  - type: input
+    id: deadline
+    attributes:
+      label: 截止日
+      description: 格式 2026-10-10。到这天还没发生，就算"不成"
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        以下是断语，可以先不填，稍后在本 issue 下回复 `liuren-verdict` 代码块补上，格式见 CONTRIBUTING。
   - type: dropdown
     id: judge_type
     attributes:
       label: 谁断的
-      options:
-        - 我自己
-        - AI
-    validations:
-      required: true
+      options: [不在这里填, 我自己, AI]
   - type: input
     id: model
     attributes:
@@ -48,7 +62,7 @@ body:
     id: harness
     attributes:
       label: harness（AI 断的必填）
-      description: 在哪儿跑的，比如 claude-code 2.1、网页聊天、opencode 0.9
+      description: 在哪儿跑的，比如 claude-code 2.1、豆包网页、liuren-web 0.1
   - type: input
     id: skill
     attributes:
@@ -58,35 +72,24 @@ body:
     id: tools
     attributes:
       label: 能否调用工具（AI 断的必填）
-      options:
-        - 能（可跑代码或查资料）
-        - 不能
-        - 不适用（人断）
+      options: [不适用, 能（可跑代码或查资料）, 不能]
   - type: dropdown
     id: outcome
     attributes:
       label: 断：成还是不成
-      options:
-        - 成
-        - 不成
-    validations:
-      required: true
+      options: [不在这里填, 成, 不成]
   - type: input
     id: window
     attributes:
-      label: 应期
-      description: 结果会在什么时间区间内出现，比如"10 月 10 日前"
-    validations:
-      required: true
+      label: 应期（断"成"时填）
+      description: 格式 2026-10-08 ~ 2026-10-09
   - type: dropdown
     id: confidence
     attributes:
       label: 把握
-      options: [5成, 6成, 7成, 8成, 9成]
-    validations:
-      required: true
+      options: ["0.5", "0.6", "0.7", "0.8", "0.9", "1.0"]
   - type: textarea
     id: basis
     attributes:
       label: 依据（可选）
-      description: 课盘、断的理由，想写多少写多少。同一问题再加一家断语，在本 issue 下按同样的字段回复即可，回复时间就是那家的下注时间
+      description: 课盘、断的理由，想写多少写多少
