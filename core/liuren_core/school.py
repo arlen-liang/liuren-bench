@@ -24,6 +24,10 @@ class School:
     shehai: str = "count"
     # 涉害数克时是否计入地盘所寄之干
     shehai_count_gan: bool = True
+    # 子时换日："子初" 即 23 点换日；"子正" 即 0 点换日。未核
+    zishi: str = "子初"
+    # 定占时、换日是否用真太阳时（须给经度）。默认用北京时间。未核
+    true_solar: bool = False
 
 
 DEFAULT = School()

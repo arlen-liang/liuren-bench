@@ -6,7 +6,10 @@ requires-python = ">=3.10"
 license = "MIT"
 
 [dependency-groups]
-dev = ["pytest>=8"]
+dev = [
+    "ephem>=4.2.1",
+    "pytest>=8",
+]
 
 [build-system]
 requires = ["setuptools>=77"]
@@ -14,3 +17,6 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 packages = ["liuren_core"]
+
+[tool.setuptools.package-data]
+liuren_core = ["data/*.json"]
