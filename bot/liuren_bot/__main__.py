@@ -1,6 +1,6 @@
 """GitHub Action 入口。
 
-    python -m liuren_bot seal            # issues.opened / issue_comment.created
+    python -m liuren_bot seal            # issues.opened / labeled、issue_comment.created、手动补处理
     python -m liuren_bot export OUT_DIR  # 定时导出
 
 事件内容一律从 $GITHUB_EVENT_PATH 读 JSON，不经 shell。
@@ -15,7 +15,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from .export import build_case, ledger, ledger_md
-from .parse import Invalid, blocks, form_fields
+from .parse import Invalid, blocks, form_fields, looks_like_live
 from .seal import render, seal_comment, seal_issue
 
 API = "https://api.github.com"
@@ -45,14 +45,20 @@ def _paged(path: str):
 def seal():
     repo = os.environ["GITHUB_REPOSITORY"]
     event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text("utf-8"))
-    n = event["issue"]["number"]
+    name = os.environ["GITHUB_EVENT_NAME"]
+    n = int(event["inputs"]["issue"]) if name == "workflow_dispatch" else event["issue"]["number"]
     # 事件里的内容可能已过时（机器人排队期间用户可能改过），一律重新拉取
     issue, _ = _req("GET", f"/repos/{repo}/issues/{n}")
-    labels = {l["name"] for l in issue.get("labels", [])}
-    if "live-case" not in labels or issue.get("pull_request"):
+    if issue.get("pull_request"):
         return
+    labels = {l["name"] for l in issue.get("labels", [])}
+    if "live-case" not in labels:
+        if name == "issue_comment" or not looks_like_live(issue["body"]):
+            return
+        _req("POST", f"/repos/{repo}/issues/{n}/labels", {"labels": ["live-case"]})
+        labels.add("live-case")
 
-    if os.environ["GITHUB_EVENT_NAME"] == "issues":
+    if name in ("issues", "workflow_dispatch"):
         if labels & {"sealed", "invalid"}:          # opened 与 labeled 可能各触发一次，只封一次
             return
         try:

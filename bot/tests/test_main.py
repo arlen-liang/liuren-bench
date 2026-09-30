@@ -70,9 +70,23 @@ def test_invalid_question_labelled_invalid(monkeypatch, tmp_path):
 
 
 def test_not_live_case_ignored(monkeypatch, tmp_path):
-    api = FakeAPI(issue_with([]))
+    api = FakeAPI(issue_with([], "随便聊聊，不是实占"))
     run(monkeypatch, tmp_path, api, "issues", {"action": "opened", "issue": {"number": 7}})
     assert api.posted() == []
+
+
+def test_unlabelled_form_issue_gets_labelled_and_sealed(monkeypatch, tmp_path):
+    """普通用户用 gh 开的 issue 标签会被丢掉：机器人按正文结构认出来，自己打标签再封存。"""
+    api = FakeAPI(issue_with([]))
+    run(monkeypatch, tmp_path, api, "issues", {"action": "opened", "issue": {"number": 7}})
+    (p0, b0), (p1, b1), (p2, b2) = api.posted()
+    assert b0 == {"labels": ["live-case"]} and "已封存" in b1["body"] and b2 == {"labels": ["sealed"]}
+
+
+def test_manual_dispatch(monkeypatch, tmp_path):
+    api = FakeAPI(issue_with(["live-case"]))
+    run(monkeypatch, tmp_path, api, "workflow_dispatch", {"inputs": {"issue": "7"}})
+    assert "已封存" in api.posted()[0][1]["body"]
 
 
 def test_comment_sealed_from_fresh_copy(monkeypatch, tmp_path):

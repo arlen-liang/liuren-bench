@@ -43,6 +43,11 @@ class Invalid(Exception):
         self.reasons = reasons
 
 
+def looks_like_live(body: str) -> bool:
+    """没带标签的 issue 是否为实占表单：普通用户用 API / gh 开 issue 时，标签会被 GitHub 悄悄丢掉。"""
+    return all(f"### {h}" in (body or "") for h in ("起课时间", "占事", "截止日"))
+
+
 def form_fields(body: str) -> dict:
     """把 issue 表单渲染出的 markdown 拆回字段。未识别的标题忽略。"""
     fields, key, buf = {}, None, []

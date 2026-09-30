@@ -8,22 +8,29 @@ on:
     types: [opened, labeled]
   issue_comment:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      issue:
+        description: 要补处理的 issue 编号（漏了事件时用）
+        required: true
 
 permissions:
   issues: write
   contents: read
 
 concurrency:
-  group: live-${{ github.event.issue.number }}
+  group: live-${{ github.event.issue.number || inputs.issue }}
   cancel-in-progress: false
 
 jobs:
   seal:
+    # 没带标签的新 issue 也放进来，由 Python 按正文结构判断是否实占（普通用户用 gh 开的 issue 会丢标签）
     if: >-
-      contains(github.event.issue.labels.*.name, 'live-case') &&
-      !github.event.issue.pull_request &&
-      (github.event_name != 'issues' || github.event.action == 'opened' || github.event.label.name == 'live-case') &&
-      (github.event_name != 'issue_comment' || github.event.comment.user.type != 'Bot')
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issues' && !github.event.issue.pull_request &&
+        (github.event.action == 'opened' || github.event.label.name == 'live-case')) ||
+      (github.event_name == 'issue_comment' && !github.event.issue.pull_request &&
+        contains(github.event.issue.labels.*.name, 'live-case') && github.event.comment.user.type != 'Bot')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
