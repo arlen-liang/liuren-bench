@@ -1,0 +1,21 @@
+# 凭证
+.env
+*.pem
+*.key
+*secret*
+*token*
+
+# 二进制与版权资料（点校本 PDF、扫描件不进仓）
+*.pdf
+*.docx
+*.xlsx
+*.zip
+*.epub
+*.mobi
+
+# 系统与环境
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+.nest

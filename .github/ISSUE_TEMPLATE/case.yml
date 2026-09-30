@@ -1,0 +1,36 @@
+name: 古籍课盘
+description: 提交古籍中带完整课盘的课例，用于校验引擎
+title: "[课盘] 书名 卷次：日干支 占时"
+labels: ["golden-case"]
+body:
+  - type: input
+    id: source
+    attributes:
+      label: 出处
+      description: 书名、版本（底本或点校本）、卷次或页码
+    validations:
+      required: true
+  - type: input
+    id: time
+    attributes:
+      label: 起课信息
+      description: 月将、占时、日干支；原书有年月、节气的一并写上。原书没写的留空
+    validations:
+      required: true
+  - type: textarea
+    id: chart
+    attributes:
+      label: 原书课盘
+      description: 四课、三传，有天将的一并写上。照原书录，不要自行补排
+    validations:
+      required: true
+  - type: textarea
+    id: text
+    attributes:
+      label: 原文（可选）
+      description: 课例原文。只录古籍原文，不要复制现代点校本的校注
+  - type: textarea
+    id: note
+    attributes:
+      label: 备注（可选）
+      description: 刊误、异文、流派归属等

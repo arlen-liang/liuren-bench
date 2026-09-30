@@ -1,0 +1,24 @@
+name: 流派差异
+description: 记录某条起课规则在各派之间的不同做法
+title: "[流派] 规则名"
+labels: ["school-difference"]
+body:
+  - type: input
+    id: rule
+    attributes:
+      label: 规则
+      description: 例如：月将何时换将、贵人口诀、昼夜分界、某类边缘课的取传
+    validations:
+      required: true
+  - type: textarea
+    id: variants
+    attributes:
+      label: 各派做法与出处
+      description: 每种做法一段，写明出自哪本书、哪一卷。没有出处的也可以写，会先挂着等补
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: 受影响的课例（可选）
+      description: 按不同做法会排出不同结果的具体课例
