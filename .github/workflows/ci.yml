@@ -38,7 +38,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install
-        run: pip install ./core pytest
+        run: pip install ./core pytest jsonschema
 
       - name: Run tests
         run: pytest -q core/tests

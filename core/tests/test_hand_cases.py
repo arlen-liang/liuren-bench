@@ -17,5 +17,5 @@ CASES = [
 @pytest.mark.parametrize("day,yj,hour,method,sub,chuan", CASES)
 def test_hand(day, yj, hour, method, sub, chuan):
     c = cast(day, yj, hour)
-    assert (c["课体"]["宗门"], c["课体"]["课名"]) == (method, sub)
-    assert "".join(n["支"] for n in c["三传"]) == chuan
+    assert (c["method"]["gate"], c["method"]["name"]) == (method, sub)
+    assert "".join(n["branch"] for n in c["transmissions"]) == chuan

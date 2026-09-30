@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/arlen-liang/liuren-bench/docs/schema/chart-1.json",
+  "title": "liuren-chart/1 课盘",
+  "type": "object",
+  "$defs": {
+    "zhi": {"type": "string", "enum": ["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"]},
+    "gan": {"type": "string", "enum": ["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"]},
+    "ganzhi": {"type": "string", "pattern": "^[甲乙丙丁戊己庚辛壬癸][子丑寅卯辰巳午未申酉戌亥]$"},
+    "general": {"type": "string", "enum": ["贵","蛇","雀","合","勾","龙","空","虎","常","玄","阴","后"]},
+    "zhi_map": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/zhi"},
+      "minProperties": 12, "maxProperties": 12
+    },
+    "datetime": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$"}
+  },
+  "required": ["format", "engine", "input", "school", "plate", "generals", "noble", "lessons", "method", "transmissions", "void"],
+  "properties": {
+    "format": {"const": "liuren-chart/1"},
+    "engine": {"type": "string"},
+    "input": {
+      "type": "object",
+      "required": ["day", "month_general", "hour"],
+      "properties": {
+        "day": {"$ref": "#/$defs/ganzhi"},
+        "month_general": {"$ref": "#/$defs/zhi"},
+        "hour": {"$ref": "#/$defs/zhi"}
+      },
+      "additionalProperties": false
+    },
+    "school": {
+      "type": "object",
+      "required": ["guiren", "daynight", "shehai", "shehai_count_gan", "zishi", "true_solar"],
+      "properties": {
+        "guiren": {"enum": ["甲牛", "甲羊"]},
+        "daynight": {"enum": ["卯酉"]},
+        "shehai": {"enum": ["count", "mengzhong"]},
+        "shehai_count_gan": {"type": "boolean"},
+        "zishi": {"enum": ["子初", "子正"]},
+        "true_solar": {"type": "boolean"}
+      }
+    },
+    "plate": {"allOf": [{"$ref": "#/$defs/zhi_map"}, {"additionalProperties": {"$ref": "#/$defs/zhi"}}]},
+    "generals": {"allOf": [{"$ref": "#/$defs/zhi_map"}, {"additionalProperties": {"$ref": "#/$defs/general"}}]},
+    "noble": {
+      "type": "object",
+      "required": ["period", "direction"],
+      "properties": {"period": {"enum": ["昼", "夜"]}, "direction": {"enum": ["顺", "逆"]}},
+      "additionalProperties": false
+    },
+    "lessons": {
+      "type": "array", "minItems": 4, "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["up", "down", "general"],
+        "properties": {
+          "up": {"$ref": "#/$defs/zhi"},
+          "down": {"anyOf": [{"$ref": "#/$defs/zhi"}, {"$ref": "#/$defs/gan"}]},
+          "general": {"$ref": "#/$defs/general"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "method": {
+      "type": "object",
+      "required": ["gate", "name"],
+      "properties": {
+        "gate": {"enum": ["贼克", "比用", "涉害", "遥克", "昴星", "别责", "八专", "伏吟", "返吟"]},
+        "name": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "transmissions": {
+      "type": "array", "minItems": 3, "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["branch", "general", "kin", "void"],
+        "properties": {
+          "branch": {"$ref": "#/$defs/zhi"},
+          "general": {"$ref": "#/$defs/general"},
+          "kin": {"enum": ["父", "兄", "子", "财", "官"]},
+          "void": {"type": "boolean"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "void": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/zhi"}},
+    "time": {
+      "type": "object",
+      "required": ["beijing", "local", "true_solar", "year", "month", "day", "hour", "month_general", "solar_term"],
+      "properties": {
+        "beijing": {"$ref": "#/$defs/datetime"},
+        "local": {"$ref": "#/$defs/datetime"},
+        "true_solar": {"type": "boolean"},
+        "longitude": {"type": ["number", "null"]},
+        "year": {"$ref": "#/$defs/ganzhi"},
+        "month": {"$ref": "#/$defs/ganzhi"},
+        "day": {"$ref": "#/$defs/ganzhi"},
+        "hour": {"$ref": "#/$defs/zhi"},
+        "month_general": {"$ref": "#/$defs/zhi"},
+        "solar_term": {
+          "type": "object",
+          "required": ["name", "at"],
+          "properties": {"name": {"type": "string"}, "at": {"$ref": "#/$defs/datetime"}}
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

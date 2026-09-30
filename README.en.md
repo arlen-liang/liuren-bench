@@ -4,7 +4,7 @@
 
 liuren-bench puts AI to work on Da Liu Ren (大六壬), a classical Chinese divination system: the AI casts a chart, makes a call, and the call is sealed until reality delivers the answer, all recorded in a public scorebook. What gets tested is not just the model, but the harness it runs in.
 
-Status: pre-alpha. A draft casting engine is in `core/`: it casts straight from a calendar time and passes the 720-lesson consistency checks; its rules have been checked line by line against 《六壬大全》 (see [docs/rules.md](docs/rules.md), in Chinese). Live cases and the official skill haven't opened yet.
+Status: pre-alpha. The casting engine in `core/` casts straight from a calendar time and passes the 720-lesson consistency checks; its rules have been checked line by line against 《六壬大全》 (see [docs/rules.md](docs/rules.md), in Chinese). Live cases and the official skill haven't opened yet.
 
 ## Why Da Liu Ren
 
@@ -37,12 +37,12 @@ bench/          question generation, scoring, leaderboards (MIT, planned)
 cases/
   classical/    classical cases (CC-BY-4.0)
   live/         live cases, one file each, called then scored (CC-BY-4.0)
-docs/           methodology, rule audit
+docs/           rule audit, chart data format
 ```
 
 ## Roadmap
 
-M1 engine → M2 live cases and official skill → M3 casting track → M4 classical cases and text track → M5 judgement track. Currently at M1. See [ROADMAP.md](ROADMAP.md) (in Chinese).
+M1 engine → M2 live cases and official skill → M3 casting track → M4 classical cases and text track → M5 judgement track. M1 is done; currently at M2. See [ROADMAP.md](ROADMAP.md) (in Chinese).
 
 ## Contributing
 

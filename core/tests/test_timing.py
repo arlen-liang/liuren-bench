@@ -18,7 +18,7 @@ def test_day_anchors():
 
 def test_year_month_anchor():
     t = resolve(datetime(2008, 8, 8, 20, 0))
-    assert (t["年"], t["月"], t["日"]) == ("戊子", "庚申", "庚辰")
+    assert (t["year"], t["month"], t["day"]) == ("戊子", "庚申", "庚辰")
 
 
 def test_jieqi_table_spotcheck():
@@ -34,32 +34,32 @@ def test_jieqi_table_spotcheck():
 def test_lichun_changes_year():
     before = resolve(datetime(2026, 2, 4, 4, 1, 0))
     after = resolve(datetime(2026, 2, 4, 4, 2, 0))
-    assert (before["年"], before["月"]) == ("乙巳", "己丑")
-    assert (after["年"], after["月"]) == ("丙午", "庚寅")
+    assert (before["year"], before["month"]) == ("乙巳", "己丑")
+    assert (after["year"], after["month"]) == ("丙午", "庚寅")
 
 
 def test_yuejiang_changes_at_zhongqi_moment():
     # 2026 雨水 北京时间 02-18 23:51:43
-    assert resolve(datetime(2026, 2, 18, 23, 51, 42))["月将"] == "子"
-    assert resolve(datetime(2026, 2, 18, 23, 51, 44))["月将"] == "亥"
+    assert resolve(datetime(2026, 2, 18, 23, 51, 42))["month_general"] == "子"
+    assert resolve(datetime(2026, 2, 18, 23, 51, 44))["month_general"] == "亥"
 
 
 def test_all_twelve_generals_in_a_year():
-    seen = {resolve(datetime(2026, 1, 1) + timedelta(days=d))["月将"] for d in range(0, 365, 5)}
+    seen = {resolve(datetime(2026, 1, 1) + timedelta(days=d))["month_general"] for d in range(0, 365, 5)}
     assert len(seen) == 12
 
 
 def test_zishi():
     late = datetime(2026, 9, 30, 23, 30)
-    assert resolve(late)["占时"] == "子"
-    assert resolve(late, zishi="子初")["日"] == day_ganzhi(date(2026, 10, 1))
-    assert resolve(late, zishi="子正")["日"] == day_ganzhi(date(2026, 9, 30))
-    assert resolve(datetime(2026, 9, 30, 0, 30), zishi="子正")["日"] == day_ganzhi(date(2026, 9, 30))
+    assert resolve(late)["hour"] == "子"
+    assert resolve(late, zishi="子初")["day"] == day_ganzhi(date(2026, 10, 1))
+    assert resolve(late, zishi="子正")["day"] == day_ganzhi(date(2026, 9, 30))
+    assert resolve(datetime(2026, 9, 30, 0, 30), zishi="子正")["day"] == day_ganzhi(date(2026, 9, 30))
 
 
 def test_hours():
     for h, z in [(0, "子"), (1, "丑"), (3, "寅"), (11, "午"), (12, "午"), (13, "未"), (22, "亥"), (23, "子")]:
-        assert resolve(datetime(2026, 9, 30, h, 10))["占时"] == z
+        assert resolve(datetime(2026, 9, 30, h, 10))["hour"] == z
 
 
 def test_equation_of_time():
@@ -71,7 +71,7 @@ def test_equation_of_time():
 def test_true_solar():
     # 乌鲁木齐（东经约 87.6°）北京时间 12:00，平太阳时约早 2 小时 10 分，落在巳时
     t = resolve(datetime(2026, 9, 30, 12, 0), true_solar=True, longitude=87.6)
-    assert t["占时"] == "巳"
+    assert t["hour"] == "巳"
     with pytest.raises(ValueError):
         resolve(datetime(2026, 9, 30, 12, 0), true_solar=True)
 
@@ -83,12 +83,14 @@ def test_timezone_aware_input():
 
 def test_cast_at_matches_cast():
     c = cast_at(datetime(2026, 9, 30, 14, 20))
-    t = c["时间"]
-    base = cast(t["日"], t["月将"], t["占时"])
-    assert c["三传"] == base["三传"] and c["四课"] == base["四课"]
-    assert c["流派"]["子时换日"] == "子初"
+    t = c["time"]
+    base = cast(t["day"], t["month_general"], t["hour"])
+    assert c["transmissions"] == base["transmissions"] and c["lessons"] == base["lessons"]
+    assert c["school"]["zishi"] == "子初"
     s = School(true_solar=True)
-    assert cast_at(datetime(2026, 9, 30, 14, 20), s, longitude=116.4)["时间"]["起课时间"].endswith("（真太阳时）")
+    t = cast_at(datetime(2026, 9, 30, 14, 20), s, longitude=116.4)["time"]
+    assert t["true_solar"] is True and t["longitude"] == 116.4
+    assert t["local"] != t["beijing"]
 
 
 def test_out_of_range():

@@ -19,11 +19,11 @@ def cast_by(day, a, b, night=False):
 
 
 def chuan(c):
-    return "".join(n["支"] for n in c["三传"])
+    return "".join(n["branch"] for n in c["transmissions"])
 
 
 def jiang(c):
-    return "".join(n["将"] for n in c["三传"])
+    return "".join(n["general"] for n in c["transmissions"])
 
 
 # ---- 注例：初传 ----
@@ -49,7 +49,7 @@ FAYONG = [
 
 @pytest.mark.parametrize("vol,day,a,b,note", FAYONG)
 def test_fayong(vol, day, a, b, note):
-    assert cast_by(day, a, b)["三传"][0]["支"] == a
+    assert cast_by(day, a, b)["transmissions"][0]["branch"] == a
 
 
 def test_chuan_given_in_text():
@@ -73,16 +73,16 @@ def test_generals_given_in_text():
     # 卷十二 太阴内战格：壬辰、壬戌日返吟夜占，乃太阴乘巳临亥为用
     for day in ("壬辰", "壬戌"):
         c = cast_by(day, "巳", "亥", night=True)
-        assert c["课体"]["宗门"] == "返吟"
-        assert (c["三传"][0]["支"], c["三传"][0]["将"]) == ("巳", "阴")
+        assert c["method"]["gate"] == "返吟"
+        assert (c["transmissions"][0]["branch"], c["transmissions"][0]["general"]) == ("巳", "阴")
     # 卷十二 天空内战格：丁丑日卯加申为用，夜占
-    assert cast_by("丁丑", "卯", "申", night=True)["三传"][0]["将"] == "空"
+    assert cast_by("丁丑", "卯", "申", night=True)["transmissions"][0]["general"] == "空"
     # 卷一 己巳日寅加巳发用 顺贵朱临寅
     c = cast_by("己巳", "寅", "巳")
-    assert c["贵人"]["顺逆"] == "顺" and c["三传"][0]["将"] == "雀"
+    assert c["noble"]["direction"] == "顺" and c["transmissions"][0]["general"] == "雀"
     # 卷十二 庚午日午加庚发用，又午加未暮将，天乙临干（月将午加未时，夜贵）
     c = cast("庚午", "亥", "子")      # 与午加未同一课，取夜时
-    assert c["三传"][0]["支"] == "午" and c["四课"][0]["将"] == "贵"
+    assert c["transmissions"][0]["branch"] == "午" and c["lessons"][0]["general"] == "贵"
 
 
 # ---- 卷七 涉害课例，原书附课盘 ----
@@ -91,8 +91,8 @@ def test_shehai_dingmao():
     """正月丁卯日丑时亥将占，二下贼上……亥加丑前行历辰、戊、未、己、戌土位五重，归本家亥位；
     丑加卯前行只历辰中乙木一重。此涉害深者当取亥加丑为用。原书三传：亥朱、酉贵、未阴。"""
     c = cast("丁卯", "亥", "丑")
-    assert [k["上"] + k["下"] for k in c["四课"]] == ["巳丁", "卯巳", "丑卯", "亥丑"]
-    assert c["课体"]["宗门"] == "涉害"
+    assert [k["up"] + k["down"] for k in c["lessons"]] == ["巳丁", "卯巳", "丑卯", "亥丑"]
+    assert c["method"]["gate"] == "涉害"
     assert chuan(c) == "亥酉未"
     assert jiang(c) == "雀贵阴"
 
@@ -105,8 +105,8 @@ def _all720():
 
 def test_bieze_nine():
     """别责：刚三柔六共九课。戊午戊辰与丙辰，干上皆午；辛丑辛未各二日；丁酉、辛酉各一课。"""
-    got = sorted((d, c["四课"][0]["上"]) for (d, off), c in _all720().items()
-                 if c["课体"]["宗门"] == "别责")
+    got = sorted((d, c["lessons"][0]["up"]) for (d, off), c in _all720().items()
+                 if c["method"]["gate"] == "别责")
     assert got == sorted([("戊辰", "午"), ("戊午", "午"), ("丙辰", "午"),
                           ("辛丑", "丑"), ("辛丑", "未"), ("辛未", "丑"), ("辛未", "未"),
                           ("丁酉", "巳"), ("辛酉", "酉")])
@@ -114,10 +114,10 @@ def test_bieze_nine():
 
 def test_maoxing_sixteen():
     """补论：凡昴星止十六课。"""
-    assert sum(c["课体"]["宗门"] == "昴星" for c in _all720().values()) == 16
+    assert sum(c["method"]["gate"] == "昴星" for c in _all720().values()) == 16
 
 
 def test_fuyin_only_yi_gui_have_ke():
     """伏吟天地皆不动，乙癸有克法不同。"""
-    got = sorted({d[0] for d in JIAZI if cast(d, "子", "子")["课体"]["课名"] == "有克"})
+    got = sorted({d[0] for d in JIAZI if cast(d, "子", "子")["method"]["name"] == "有克"})
     assert got == ["乙", "癸"]

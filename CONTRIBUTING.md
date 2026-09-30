@@ -17,10 +17,10 @@
 在结果出来之前，新建一个文件 `cases/live/<起课日期>-<你的GitHub ID>-<序号>.yml`：
 
 ```yaml
-# 格式为草案，M1 定稿时可能调整
+# 实占文件格式为草案，M2 定稿；其中课盘部分已定为 liuren-chart/1，见 docs/format.md
 time: 2026-10-08 14:20      # 起课时间，北京时间
 place: 上海                  # 只写到城市，用于真太阳时，可不填
-chart: auto                 # 填 auto 由 CI 按时间排盘；自己排的照写，CI 会核对
+chart: auto                 # 填 auto；CI 按时间排盘，把整张盘（liuren-chart/1）连同引擎版本写回文件封存
 question: 本周五前能否收到面试回复
 category: 求职
 owner: "@your-github-id"    # 提问的人，负责回来开奖

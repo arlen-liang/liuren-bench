@@ -101,12 +101,14 @@ def resolve(dt: datetime, zishi: str = "子初", true_solar: bool = False,
     month_gan = GAN[(GAN.index(_WUHU[year_gz[0]]) + (ZHI.index(jian) - 2) % 12) % 10]
 
     return {
-        "北京时间": utc.astimezone(BJT).strftime("%Y-%m-%d %H:%M:%S"),
-        "起课时间": lt.strftime("%Y-%m-%d %H:%M:%S") + ("（真太阳时）" if true_solar else ""),
-        "年": year_gz,
-        "月": month_gan + jian,
-        "日": day_ganzhi(d),
-        "占时": hour,
-        "月将": ZHONGQI_JIANG[zq],
-        "中气": {"名": zq, "时刻": zq_t.astimezone(BJT).strftime("%Y-%m-%d %H:%M:%S")},
+        "beijing": utc.astimezone(BJT).strftime("%Y-%m-%d %H:%M:%S"),
+        "local": lt.strftime("%Y-%m-%d %H:%M:%S"),
+        "true_solar": true_solar,
+        "longitude": longitude,
+        "year": year_gz,
+        "month": month_gan + jian,
+        "day": day_ganzhi(d),
+        "hour": hour,
+        "month_general": ZHONGQI_JIANG[zq],
+        "solar_term": {"name": zq, "at": zq_t.astimezone(BJT).strftime("%Y-%m-%d %H:%M:%S")},
     }

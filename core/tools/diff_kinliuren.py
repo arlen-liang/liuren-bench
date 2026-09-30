@@ -34,7 +34,7 @@ for day in JIAZI:
         for mg in ZHI:
             hz = ZHI[(ZHI.index(mg) - off) % 12]
             c = cast(day, mg, hz)
-            ours = ours or ("".join(n["支"] for n in c["三传"]), c["课体"]["宗门"] + "/" + c["课体"]["课名"])
+            ours = ours or ("".join(n["branch"] for n in c["transmissions"]), c["method"]["gate"] + "/" + c["method"]["name"])
             try:
                 r = Liuren(MG_JQ[mg], "正", day, hour_gz(day, hz)).result(1)
                 theirs["".join(v[0] for v in r["三傳"].values())] += 1
