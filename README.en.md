@@ -34,9 +34,9 @@ Be clear about what this ledger is: AI calls are submitted by users, the model i
 
 ```
 core/           casting engine: time → chart (MIT)
-bot/            live-case bot: sealing and export (MIT, in progress)
-web/            web page (MIT, planned)
-skill/          official skill and reading method (MIT, planned)
+bot/            live-case bot: sealing and export (MIT)
+web/            web page (MIT)
+skill/          prompt and official skill (MIT, skill in progress)
 bench/          question generation, scoring, leaderboards (MIT, planned)
 cases/
   classical/    classical cases (CC-BY-4.0)

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>六壬实占</title>
+<style>
+  :root {
+    --bg: #faf8f4; --fg: #1f1d1a; --muted: #6b665e; --line: #ddd6ca; --card: #ffffff;
+    --accent: #8a3b12; --accent-fg: #ffffff; --ok: #2f6b3a; --warn: #9a5b00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #171512; --fg: #ece7df; --muted: #a39b8f; --line: #3a352e; --card: #211e1a;
+            --accent: #e0925a; --accent-fg: #171512; --ok: #7fbf8a; --warn: #e3b25a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+         font: 16px/1.7 -apple-system, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 1.6rem; margin: 8px 0 4px; }
+  h2 { font-size: 1.15rem; margin: 0 0 12px; }
+  .sub { color: var(--muted); margin: 0 0 24px; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 18px; margin-bottom: 18px; }
+  section[hidden] { display: none; }
+  label { display: block; font-weight: 600; margin: 12px 0 4px; }
+  .hint { font-weight: 400; color: var(--muted); font-size: .9rem; }
+  input, select, textarea { width: 100%; font: inherit; color: var(--fg); background: var(--bg);
+                            border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; }
+  textarea { min-height: 120px; resize: vertical; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+  button, .btn { display: inline-block; margin-top: 14px; padding: 9px 18px; font: inherit; font-weight: 600;
+                 border: 0; border-radius: 6px; background: var(--accent); color: var(--accent-fg);
+                 cursor: pointer; text-decoration: none; }
+  button.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  pre { white-space: pre-wrap; word-break: break-all; background: var(--bg); border: 1px solid var(--line);
+        border-radius: 6px; padding: 12px; font-size: .92rem; margin: 0; }
+  .check { display: flex; gap: 8px; align-items: center; font-weight: 400; }
+  .check input { width: auto; }
+  .msg { margin-top: 10px; font-size: .95rem; }
+  .msg.err { color: var(--warn); }
+  .msg.ok { color: var(--ok); }
+  ol.steps { padding-left: 1.2em; color: var(--muted); }
+  footer { color: var(--muted); font-size: .85rem; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>六壬实占</h1>
+  <p class="sub">先下注，后开奖。填个问题，这里排盘，你让随便哪家 AI 来断，断完提交到公开账本，等结果出来再回来开奖。</p>
+
+  <section id="s1">
+    <h2>一、起课</h2>
+    <label for="time">起课时间 <span class="hint">北京时间，默认就是现在；要在提交前 24 小时以内</span></label>
+    <div class="row">
+      <input id="time" placeholder="2026-10-08 14:20">
+      <button type="button" class="ghost" id="now" style="margin-top:0">用现在的时间</button>
+    </div>
+    <label for="question">占事 <span class="hint">写成事后能判成不成的样子</span></label>
+    <input id="question" placeholder="本周五前能否收到面试回复（邮件或电话都算）">
+    <div class="row">
+      <div>
+        <label for="category">类别</label>
+        <select id="category"></select>
+      </div>
+      <div>
+        <label for="deadline">截止日 <span class="hint">到这天没发生就算不成</span></label>
+        <input id="deadline" type="date">
+      </div>
+    </div>
+    <p class="hint">只交自己的事；涉及别人要让人认不出是谁；不写真名、单位、地址；不涉及未成年人。提交后是公开的。</p>
+    <button type="button" id="cast">起课</button>
+    <div class="msg" id="m1"></div>
+  </section>
+
+  <section id="s2" hidden>
+    <h2>二、让 AI 断</h2>
+    <pre id="chart"></pre>
+    <label for="prompt">把下面这段整段复制，粘给你常用的 AI <span class="hint">最好关掉它的联网搜索</span></label>
+    <textarea id="prompt" readonly style="min-height:200px"></textarea>
+    <button type="button" id="copy">复制</button>
+    <label for="reply">把 AI 的回答整段粘回来</label>
+    <textarea id="reply" placeholder="回答里要有 ```liuren-verdict 开头的代码块"></textarea>
+    <div class="msg" id="m2"></div>
+  </section>
+
+  <section id="s3" hidden>
+    <h2>三、核对断者信息，提交</h2>
+    <div class="row">
+      <div><label for="model">模型 <span class="hint">以 App 里显示的为准</span></label><input id="model"></div>
+      <div><label for="harness">在哪儿用的</label><input id="harness" placeholder="豆包网页、Kimi 网页……"></div>
+    </div>
+    <label class="check"><input type="checkbox" id="tools"> 开了联网搜索或能跑代码</label>
+    <div class="row">
+      <div><label for="outcome">断</label><select id="outcome"><option>成</option><option>不成</option></select></div>
+      <div><label for="confidence">把握</label>
+        <select id="confidence"><option>0.5</option><option>0.6</option><option>0.7</option><option>0.8</option><option>0.9</option><option>1.0</option></select></div>
+    </div>
+    <label for="window">应期 <span class="hint">断成时填，如 2027-05-01 ~ 2027-05-31</span></label>
+    <input id="window">
+    <label for="basis">依据</label>
+    <textarea id="basis" style="min-height:80px"></textarea>
+    <button type="button" id="link">生成提交链接</button>
+    <div class="msg" id="m3"></div>
+    <ol class="steps" id="after" hidden>
+      <li>点上面的链接，会打开 GitHub 的提交页，内容已经填好（需要登录 GitHub）</li>
+      <li>勾上四项确认，点 Submit new issue</li>
+      <li>机器人会马上回复一条"已封存"；截止日前后回到那个 issue，回复结果开奖</li>
+    </ol>
+  </section>
+
+  <footer>
+    <p>课盘规则以《六壬大全》为准，与提交后机器人封存的盘一致。AI 断者信息全凭自报。
+      源码与规则：<a href="https://github.com/arlen-liang/liuren-bench">liuren-bench</a> · 提示词版本 <span id="pv"></span></p>
+  </footer>
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>

@@ -42,3 +42,31 @@ jobs:
 
       - name: Run tests
         run: pytest -q core/tests bot/tests
+
+  web:
+    name: web
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install
+        run: pip install ./core
+
+      - name: web/data 与引擎一致
+        run: python core/tools/gen_web.py --check
+
+      - name: JS 与 Python 比对 1000 个随机时刻
+        run: |
+          python core/tools/gen_web_fixtures.py 1000 > "$RUNNER_TEMP/fixtures.json"
+          node web/test/compare.mjs "$RUNNER_TEMP/fixtures.json"
+
+      - name: 页面逻辑测试
+        run: node --test web/test/ui.test.mjs web/test/app.smoke.test.mjs

@@ -76,9 +76,9 @@ issue 一开，机器人就回复一条"已封存"：排好的课盘、引擎版
 
 ```
 core/           起课引擎：时间 → 课盘（MIT）
-bot/            实占库机器人：封存、导出（MIT，施工中）
-web/            网页版（MIT，规划中）
-skill/          官方 skill 与断法（MIT，规划中）
+bot/            实占库机器人：封存、导出（MIT）
+web/            网页版（MIT）
+skill/          提示词与官方 skill（MIT，skill 施工中）
 bench/          出题、判分、榜单（MIT，规划中）
 cases/
   classical/    古籍课例：课盘 + 原文断语 + 出处（CC-BY-4.0）
