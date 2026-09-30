@@ -5,7 +5,7 @@ import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { castAt, jieqiTable, parseBJT } from "../liuren.js";
-import { PROMPT_VERSION, buildPrompt, chartText, issueUrl, nowBJT, parseVerdict } from "../ui.js";
+import { PROMPT_VERSION, buildPrompt, chartText, issueUrl, nowBJT, parseVerdict, verdictBlock } from "../ui.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const read = (p) => readFileSync(join(here, p), "utf8");
@@ -88,4 +88,15 @@ test("下拉项的值必须与 issue 表单完全一致", () => {
 
 test("北京时间", () => {
   assert.equal(nowBJT(Date.UTC(2026, 8, 30, 14, 52)), "2026-09-30 22:52");
+});
+
+test("追加回复：带完整标记，能被网页自己的解析器和机器人读回", () => {
+  const v = { judge: { model: "Kimi K3", harness: "Kimi 网页", tools: false }, outcome: "不成", confidence: "0.7", basis: "末传旬空\n又乘天空" };
+  const block = verdictBlock(v);
+  assert.ok(block.startsWith("```liuren-verdict\n") && block.endsWith("\n```"));
+  const back = parseVerdict(block);
+  assert.equal(back.outcome, "不成");
+  assert.equal(back.judge.model, "Kimi K3");
+  assert.equal(back.judge.skill, PROMPT_VERSION);
+  assert.ok(!block.includes("window"));
 });

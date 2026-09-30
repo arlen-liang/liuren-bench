@@ -98,6 +98,18 @@ export function issueUrl({ time, question, category, deadline, verdict }) {
   return `https://github.com/${REPO}/issues/new?${p.toString()}`;
 }
 
+// 追加到已有 issue 用的回复：带完整代码块标记，粘进 issue 回复框即可
+export function verdictBlock(verdict) {
+  const j = verdict.judge || {};
+  const lines = ["```liuren-verdict", "judge:", `  model: ${j.model}`, `  harness: ${j.harness}`,
+    `  skill: ${j.skill || PROMPT_VERSION}`, `  tools: ${j.tools ? "true" : "false"}`, `outcome: ${verdict.outcome}`];
+  if (verdict.outcome === "成" && verdict.window) lines.push(`window: ${verdict.window}`);
+  lines.push(`confidence: ${Number(verdict.confidence).toFixed(1)}`);
+  if (verdict.basis) lines.push(`basis: ${JSON.stringify(verdict.basis.replace(/\s+/g, " "))}`);
+  lines.push("```");
+  return lines.join("\n");
+}
+
 // 当前北京时间，"2026-10-08 14:20"
 export function nowBJT(now = Date.now()) {
   const d = new Date(now + 8 * 3600 * 1000);

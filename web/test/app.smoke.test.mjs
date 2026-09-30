@@ -60,4 +60,8 @@ test("三步走通", async () => {
   assert.equal(q.get("harness"), "Kimi 网页");
   assert.equal(q.get("window"), "2099-01-01 ~ 2099-02-01");
   assert.equal(els.after.hidden, false);
+
+  els.asreply.onclick();
+  await new Promise((r) => setTimeout(r, 10));
+  assert.ok(els.replytext.value.startsWith("```liuren-verdict") && els.replytext.hidden === false);
 });

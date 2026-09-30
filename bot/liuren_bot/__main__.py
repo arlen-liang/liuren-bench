@@ -15,7 +15,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from .export import build_case, ledger, ledger_md
-from .parse import Invalid, blocks, form_fields, looks_like_live
+from .parse import Invalid, blocks, form_fields, looks_like_bare_block, looks_like_live
 from .seal import render, seal_comment, seal_issue
 
 API = "https://api.github.com"
@@ -78,6 +78,13 @@ def seal():
             raise
         parsed = blocks(comment["body"])
         if not parsed:
+            missing = looks_like_bare_block(comment["body"])
+            if not missing:
+                return                                   # 普通聊天，不理
+            text = render([], [f"这条回复看起来是{'断语' if missing == 'liuren-verdict' else '开奖'}，但缺了代码块标记，没有封存"]).replace(
+                "改好后请重新回复一条（改原帖不会被读取）。",
+                f"请重新回复一条：第一行单独写 ```{missing}，最后一行单独写 ```，中间是原内容。改这条原帖不会被读取。")
+            _req("POST", f"/repos/{repo}/issues/{n}/comments", {"body": text})
             return
         if "sealed" not in labels:
             text, add = render([], ["这个 issue 的问题本身没有封存成功，请重新开一个 issue"]), []

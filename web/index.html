@@ -101,7 +101,9 @@
     <input id="window">
     <label for="basis">依据</label>
     <textarea id="basis" style="min-height:80px"></textarea>
-    <button type="button" id="link">生成提交链接</button>
+    <button type="button" id="link">这是新问题：生成提交链接</button>
+    <button type="button" class="ghost" id="asreply">给已有的 issue 追加：复制成回复</button>
+    <textarea id="replytext" readonly hidden style="min-height:160px;margin-top:10px"></textarea>
     <div class="msg" id="m3"></div>
     <ol class="steps" id="after" hidden>
       <li>点上面的链接，会打开 GitHub 的提交页，内容已经填好（需要登录 GitHub）</li>

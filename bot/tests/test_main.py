@@ -121,3 +121,32 @@ def test_plain_chat_comment_ignored(monkeypatch, tmp_path):
     api = FakeAPI(issue_with(["live-case", "sealed"]), {8: c})
     run(monkeypatch, tmp_path, api, "issue_comment", {"issue": {"number": 7}, "comment": c})
     assert api.posted() == []
+
+
+KIMI = """judge:
+  model: Kimi K3（Moonshot AI）
+  harness: 网页聊天
+  skill: liuren-prompt 0.1
+  tools: false
+outcome: 不成
+confidence: 0.7
+basis: 末传父母旬空又乘天空"""
+
+
+def test_bare_verdict_gets_hint(monkeypatch, tmp_path):
+    """实战：从网页 AI 复制时丢了 ``` 那两行。机器人要提示，不能沉默。"""
+    c = {"id": 9, "user": {"login": "alice", "type": "User"}, "created_at": "2026-10-08T08:00:00Z",
+         "updated_at": "2026-10-08T08:00:00Z", "body": KIMI}
+    api = FakeAPI(issue_with(["live-case", "sealed"]), {9: c})
+    run(monkeypatch, tmp_path, api, "issue_comment", {"issue": {"number": 7}, "comment": c})
+    [(_, b)] = api.posted()
+    assert "缺了代码块标记" in b["body"] and "```liuren-verdict" in b["body"] and "已封存" not in b["body"]
+
+
+def test_bare_result_gets_hint(monkeypatch, tmp_path):
+    c = {"id": 10, "user": {"login": "alice", "type": "User"}, "created_at": "2026-10-08T08:00:00Z",
+         "updated_at": "2026-10-08T08:00:00Z", "body": "outcome: 成\ndate: 2027-05-10"}
+    api = FakeAPI(issue_with(["live-case", "sealed"]), {10: c})
+    run(monkeypatch, tmp_path, api, "issue_comment", {"issue": {"number": 7}, "comment": c})
+    [(_, b)] = api.posted()
+    assert "```liuren-result" in b["body"]

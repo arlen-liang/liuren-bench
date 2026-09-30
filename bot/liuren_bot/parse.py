@@ -180,6 +180,15 @@ def verdict_from_form(f: dict):
                          "confidence": f.get("confidence"), "basis": f.get("basis")})
 
 
+def looks_like_bare_block(body: str) -> str | None:
+    """回复里有断语或开奖的字段、却没有代码块标记（从 AI 的回答里复制时，``` 那两行常被丢掉）。
+    返回应补的代码块名，不像就返回 None。"""
+    text = body or ""
+    if BLOCK.search(text) or not re.search(r"^\s*outcome\s*:", text, re.M):
+        return None
+    return "liuren-verdict" if re.search(r"^\s*(judge|confidence)\s*:", text, re.M) else "liuren-result"
+
+
 BLOCK = re.compile(r"```(liuren-verdict|liuren-result)[ \t]*\n(.*?)```", re.S)
 
 

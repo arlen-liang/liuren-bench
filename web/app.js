@@ -1,6 +1,6 @@
 // app.js：网页版的页面逻辑。规则与文字处理都在 liuren.js / ui.js，这里只管 DOM。
 import { castAt, jieqiTable, parseBJT } from "./liuren.js";
-import { CATEGORIES, PROMPT_VERSION, buildPrompt, chartText, issueUrl, nowBJT, parseVerdict } from "./ui.js";
+import { CATEGORIES, PROMPT_VERSION, buildPrompt, chartText, issueUrl, nowBJT, parseVerdict, verdictBlock } from "./ui.js";
 
 const $ = (id) => document.getElementById(id);
 const msg = (id, text, kind = "err") => { const el = $(id); el.textContent = text; el.className = `msg ${text ? kind : ""}`; };
@@ -64,19 +64,32 @@ function init() {
     $("s3").hidden = false;
   };
 
-  $("link").onclick = () => {
+  const readVerdict = () => {
     msg("m3", "");
     const model = $("model").value.trim(), harness = $("harness").value.trim();
-    if (!model || !harness) return msg("m3", "模型和在哪儿用的都要填，缺了这条断语进不了账");
+    if (!model || !harness) { msg("m3", "模型和在哪儿用的都要填，缺了这条断语进不了账"); return null; }
     const outcome = $("outcome").value, win = $("window").value.trim();
     if (outcome === "成" && win && !/^\d{4}-\d{2}-\d{2}\s*~\s*\d{4}-\d{2}-\d{2}$/.test(win)) {
-      return msg("m3", "应期格式应为 2027-05-01 ~ 2027-05-31");
+      msg("m3", "应期格式应为 2027-05-01 ~ 2027-05-31"); return null;
     }
-    const url = issueUrl({
-      ...current.q,
-      verdict: { judge: { model, harness, skill: PROMPT_VERSION, tools: $("tools").checked },
-                 outcome, window: win, confidence: $("confidence").value, basis: $("basis").value.trim() },
-    });
+    return { judge: { model, harness, skill: PROMPT_VERSION, tools: $("tools").checked },
+             outcome, window: win, confidence: $("confidence").value, basis: $("basis").value.trim() };
+  };
+
+  $("asreply").onclick = async () => {
+    const verdict = readVerdict();
+    if (!verdict) return;
+    const text = verdictBlock(verdict);
+    $("replytext").value = text;
+    $("replytext").hidden = false;
+    try { await navigator.clipboard.writeText(text); msg("m3", "已复制。到那个 issue 下粘贴成一条新回复即可", "ok"); }
+    catch { $("replytext").select(); msg("m3", "已选中，请手动复制，粘到那个 issue 下成一条新回复", "ok"); }
+  };
+
+  $("link").onclick = () => {
+    const verdict = readVerdict();
+    if (!verdict) return;
+    const url = issueUrl({ ...current.q, verdict });
     $("m3").innerHTML = "";
     const a = document.createElement("a");
     a.href = url; a.target = "_blank"; a.rel = "noopener"; a.className = "btn"; a.textContent = "去 GitHub 提交";
