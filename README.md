@@ -46,12 +46,14 @@ issue 一开，机器人就回复一条"已封存"：排好的课盘、引擎版
 
 网页版给用网页聊天的人：填上时间和问题，页面排好盘、生成一段提示词，粘进你常用的 AI，把回答粘回来，页面生成一个预填好的 issue 链接，点提交就行。
 
-官方 skill 给用 Claude Code、opencode 这类 agent 的人，装进去就能起课、断课、交卷：
+官方 skill（[skill/SKILL.md](skill/SKILL.md)）给用 Claude Code、opencode 这类 agent 的人。把本仓库拉下来，把 `skill/` 目录放进你的 agent 的 skill 目录（或者直接在仓库里让它读 SKILL.md），它就能起课、断课、交卷：
 
 1. 用 `core/` 引擎排盘，"定"的部分不让模型瞎猜
-2. 按一份以《六壬大全》为据的断法，引导模型给出能判对错的断语：成不成、应期在哪个区间、有几成把握
-3. 填好断者信息（模型、harness、skill 版本），请你确认
-4. 你看一眼、点头之后才提交：有 `gh` 的直接开 issue，没有的生成预填链接
+2. 附上《六壬大全》相关原文（本课课体、三传所见的神与将），让模型断课时有据可引，不凭记忆编
+3. 给出能判对错的断语：成不成、应期在哪个区间、有几成把握
+4. 断者信息（模型、harness、skill 版本）请你确认；给你过目、你点头之后才提交：有 `gh` 的直接开 issue，没有的生成预填链接
+
+网页版和 skill 用的是同一份提示词模板与原文摘录，CI 逐字比对两边生成的提示词。
 
 两条路都要有 GitHub 账号，提交走的是你自己的账号。本项目不设公开 API，不经手任何人的数据。
 
@@ -78,7 +80,7 @@ issue 一开，机器人就回复一条"已封存"：排好的课盘、引擎版
 core/           起课引擎：时间 → 课盘（MIT）
 bot/            实占库机器人：封存、导出（MIT）
 web/            网页版（MIT）
-skill/          提示词与官方 skill（MIT，skill 施工中）
+skill/          提示词、官方 skill 与断法原文库（MIT；原文库 CC BY-SA 4.0）
 bench/          出题、判分、榜单（MIT，规划中）
 cases/
   classical/    古籍课例：课盘 + 原文断语 + 出处（CC-BY-4.0）
@@ -116,4 +118,4 @@ M1 起课引擎 → M2 实占库与官方 skill → M3 起课轨 → M4 古籍�
 
 ## 许可
 
-代码 MIT，见 [LICENSE](LICENSE)；古籍课例与实占库数据 CC-BY-4.0。维护者见 [MAINTAINERS.md](MAINTAINERS.md)。
+代码 MIT，见 [LICENSE](LICENSE)；古籍课例与实占库数据 CC-BY-4.0；`skill/duanfa/daquan.json` 摘自维基文库标点本，CC BY-SA 4.0，见[说明](skill/duanfa/README.md)。维护者见 [MAINTAINERS.md](MAINTAINERS.md)。

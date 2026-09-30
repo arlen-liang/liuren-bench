@@ -3,7 +3,10 @@
 
 import { GENERAL_NAMES, KIN_NAMES, ZHI } from "./liuren.js";
 
-export const PROMPT_VERSION = "liuren-prompt 0.1";
+export const SHEN_NAMES = { 子: "神后", 丑: "大吉", 寅: "功曹", 卯: "太冲", 辰: "天罡", 巳: "太乙",
+  午: "胜光", 未: "小吉", 申: "传送", 酉: "从魁", 戌: "河魁", 亥: "登明" };
+
+export const PROMPT_VERSION = "liuren-prompt 0.2";
 export const REPO = "arlen-liang/liuren-bench";
 export const CATEGORIES = ["求职", "工作", "财运", "感情", "健康（仅限本人）", "出行", "失物", "考试", "其他"];
 
@@ -33,11 +36,22 @@ export function chartText(c) {
   ].join("\n");
 }
 
-export function buildPrompt(template, chart, question, deadline) {
-  return template
-    .replace("{{question}}", question)
-    .replace("{{deadline}}", deadline)
-    .replace("{{chart}}", chartText(chart));
+const gateKey = (c) => (c.method.gate === "贼克" ? `贼克·${c.method.name}` : c.method.gate);
+const uniq = (xs) => [...new Set(xs)];
+
+// 按课盘摘《六壬大全》原文：本课课体、三传所见十二神、三传所乘天将。与 skill/liuren_skill.py 逐字一致
+export function excerpts(chart, daquan) {
+  const parts = [`【参考原文】以下摘自${daquan.source}，供断课引据，未必句句切题：`];
+  parts.push(`〈课体·${gateKey(chart)}〉\n${daquan.gate[gateKey(chart)]}`);
+  for (const b of uniq(chart.transmissions.map((n) => n.branch))) parts.push(`〈十二神·${b}（${SHEN_NAMES[b]}）〉\n${daquan.shen[b]}`);
+  for (const j of uniq(chart.transmissions.map((n) => n.general))) parts.push(`〈天将·${g(j)}〉\n${daquan.jiang[j]}`);
+  return parts.join("\n\n");
+}
+
+// 一次替换全部占位符，只扫模板：用户文本里就算写了 {{chart}} 或 $1，也不会被二次替换
+export function buildPrompt(template, chart, question, deadline, daquan) {
+  const values = { question, deadline, chart: chartText(chart), excerpts: excerpts(chart, daquan) };
+  return template.replace(/\{\{(\w+)\}\}/g, (_, k) => values[k]);
 }
 
 // 解析 AI 回答里的 liuren-verdict 代码块。只认本项目这几个键，其余忽略。

@@ -117,6 +117,12 @@ def test_maoxing_sixteen():
     assert sum(c["method"]["gate"] == "昴星" for c in _all720().values()) == 16
 
 
+def test_fuyin_gui_day():
+    """卷七 伏吟课：以神克日干为初传，取刑为中末传。此六癸日初传丑，中戌，末传未是也。"""
+    for d in ("癸丑", "癸卯", "癸巳", "癸未", "癸酉", "癸亥"):
+        assert chuan(cast(d, "子", "子")) == "丑戌未", d
+
+
 def test_fuyin_only_yi_gui_have_ke():
     """伏吟天地皆不动，乙癸有克法不同。"""
     got = sorted({d[0] for d in JIAZI if cast(d, "子", "子")["method"]["name"] == "有克"})

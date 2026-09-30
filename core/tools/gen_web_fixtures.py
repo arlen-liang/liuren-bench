@@ -8,8 +8,13 @@ import random
 import sys
 from datetime import datetime, timedelta
 
+from pathlib import Path
+
 from liuren_core import School, cast_at
 from liuren_core.timing import BJT, _table
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "skill"))
+from liuren_skill import build_prompt  # noqa: E402
 
 
 def main(n: int):
@@ -29,8 +34,11 @@ def main(n: int):
         school = School(guiren=rnd.choice(["甲牛", "甲羊"]), zishi=rnd.choice(["子初", "子正"]),
                         true_solar=(i % 7 == 0))
         lon = round(rnd.uniform(73, 135), 2) if school.true_solar else None
-        out.append({"time": dt.strftime("%Y-%m-%d %H:%M"), "school": school.__dict__, "longitude": lon,
-                    "chart": cast_at(dt, school, longitude=lon)})
+        chart = cast_at(dt, school, longitude=lon)
+        case = {"time": dt.strftime("%Y-%m-%d %H:%M"), "school": school.__dict__, "longitude": lon, "chart": chart}
+        if school == School():          # 提示词只对默认流派（网页只用默认流派）
+            case["prompt"] = build_prompt(chart, f"测试问题{i}：$1 {{{{chart}}}}", "2099-12-31")
+        out.append(case)
     json.dump(out, sys.stdout, ensure_ascii=False)
 
 

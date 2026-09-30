@@ -9,7 +9,7 @@
 实占只收 issue，不收 PR。每个问题开一个 issue，下注、追加断语、开奖都在这个 issue 里完成。三种开法：
 
 - 网页版（M2 上线）：页面排盘、生成提示词，你把 AI 的回答粘回去，它生成预填好的 issue 链接
-- 官方 skill（M2 上线）：你的 AI 起课、断课，确认后用 `gh` 开 issue 或给你预填链接
+- 官方 skill（[skill/SKILL.md](skill/SKILL.md)）：你的 AI 起课、断课，确认后用 `gh` 开 issue 或给你预填链接
 - 直接用 issue 模板"实占下注"手填
 
 都需要一个 GitHub 账号。

@@ -22,7 +22,7 @@ You don't need to know Da Liu Ren. Ask the question, let AI make the call, come 
 
 Be clear about what this ledger is: AI calls are submitted by users, the model is self-reported, and nothing stops someone from rerolling ten times and submitting the one they like. It is for fun and for seeing what people use, not a rigorous model benchmark; the casting and judgement tracks are, since they run every model under the same script. The project takes no position on whether Da Liu Ren works. It just keeps score.
 
-**Web page and official skill.** The web page is for people who use chat apps: enter the time and question, get the chart and a prompt to paste into any AI, paste the answer back, and get a prefilled issue link. The skill is for agent users (Claude Code, opencode, …): it casts with `core/`, follows a reading method sourced from 《六壬大全》, asks you to confirm the judge declaration, and submits only after you confirm. Both need a GitHub account; there is no public API.
+**Web page and official skill.** The web page is for people who use chat apps: enter the time and question, get the chart and a prompt to paste into any AI, paste the answer back, and get a prefilled issue link. The skill ([skill/SKILL.md](skill/SKILL.md)) is for agent users (Claude Code, opencode, …): it casts with `core/`, attaches the relevant passages of 《六壬大全》 (the lesson type, and the branches and generals in the transmissions) so the model can cite sources instead of improvising, asks you to confirm the judge declaration, and submits only after you confirm. The web page and the skill share one prompt template; CI checks they produce identical prompts. Both need a GitHub account; there is no public API.
 
 **Casting.** Given a moment, cast the chart; graded item by item. Two leaderboards: bare (no tools) and agent (tools allowed, but no existing chart libraries, including this project's `core/`).
 
@@ -36,7 +36,7 @@ Be clear about what this ledger is: AI calls are submitted by users, the model i
 core/           casting engine: time → chart (MIT)
 bot/            live-case bot: sealing and export (MIT)
 web/            web page (MIT)
-skill/          prompt and official skill (MIT, skill in progress)
+skill/          prompt, official skill, source excerpts (MIT; excerpts CC BY-SA 4.0)
 bench/          question generation, scoring, leaderboards (MIT, planned)
 cases/
   classical/    classical cases (CC-BY-4.0)
@@ -65,4 +65,4 @@ One-person side project, no schedule guarantees.
 
 ## License
 
-Code: MIT, see [LICENSE](LICENSE). Case data: CC-BY-4.0. Maintainers: [MAINTAINERS.md](MAINTAINERS.md).
+Code: MIT, see [LICENSE](LICENSE). Case data: CC-BY-4.0. `skill/duanfa/daquan.json` is excerpted from the Wikisource punctuated edition and is CC BY-SA 4.0. Maintainers: [MAINTAINERS.md](MAINTAINERS.md).

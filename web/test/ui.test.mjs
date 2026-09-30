@@ -5,12 +5,13 @@ import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { castAt, jieqiTable, parseBJT } from "../liuren.js";
-import { buildPrompt, chartText, issueUrl, nowBJT, parseVerdict } from "../ui.js";
+import { PROMPT_VERSION, buildPrompt, chartText, issueUrl, nowBJT, parseVerdict } from "../ui.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const read = (p) => readFileSync(join(here, p), "utf8");
 const data = { lessons: JSON.parse(read("../data/lessons.json")), jieqi: jieqiTable(JSON.parse(read("../data/jieqi.json"))) };
 const TEMPLATE = read("../../skill/prompt.md");
+const DAQUAN = JSON.parse(read("../../skill/duanfa/daquan.json"));
 
 // issue #2 用的课盘文字（手工给出、已交给第二位断者），网页必须逐字一致
 const ISSUE2 = `起课时间：2026-09-30 22:52（北京时间）
@@ -29,11 +30,14 @@ test("chartText 与 issue #2 的课盘文字逐字一致", () => {
   assert.equal(chartText(castAt(parseBJT("2026-09-30 22:52"), data)), ISSUE2);
 });
 
-test("提示词填入问题、截止日与课盘", () => {
-  const p = buildPrompt(TEMPLATE, castAt(parseBJT("2026-09-30 22:52"), data), "能否一次通过", "2027-05-31");
+test("提示词填入问题、截止日、课盘与原文摘录", () => {
+  const p = buildPrompt(TEMPLATE, castAt(parseBJT("2026-09-30 22:52"), data), "能否一次通过", "2027-05-31", DAQUAN);
   assert.ok(p.includes("能否一次通过") && p.includes("截止日：2027-05-31") && p.includes("课体：比用·知一"));
   assert.ok(!p.includes("{{"));
-  assert.ok(p.includes("skill: liuren-prompt 0.1"));
+  assert.ok(p.includes("skill: liuren-prompt 0.2"));
+  assert.ok(p.includes("〈课体·比用〉") && p.includes("〈十二神·巳（太乙）〉") && p.includes("〈天将·太常〉"));
+  assert.ok(p.includes("铸印在巳"));                         // 太常条原文
+  assert.ok(p.includes("CC BY-SA 4.0"));                    // 注明原文授权
 });
 
 test("解析 AI 回答里的断语块", () => {
@@ -69,7 +73,7 @@ test("预填 issue 链接", () => {
   assert.equal(q.get("template"), "live.yml");
   assert.equal(q.get("time"), "2026-09-30 22:52");
   assert.equal(q.get("tools"), "能（可跑代码或查资料）");
-  assert.equal(q.get("skill"), "liuren-prompt 0.1");
+  assert.equal(q.get("skill"), PROMPT_VERSION);
   assert.equal(q.get("window"), null);                     // 断不成时不带应期
   assert.equal(q.get("confidence"), "0.6");
   assert.equal(q.get("judge_type"), "AI");

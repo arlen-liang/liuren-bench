@@ -5,16 +5,18 @@ import { CATEGORIES, PROMPT_VERSION, buildPrompt, chartText, issueUrl, nowBJT, p
 const $ = (id) => document.getElementById(id);
 const msg = (id, text, kind = "err") => { const el = $(id); el.textContent = text; el.className = `msg ${text ? kind : ""}`; };
 
-let data = null, template = "", current = null;
+let data = null, template = "", daquan = null, current = null;
 
 async function load() {
-  const [lessons, jieqi, tpl] = await Promise.all([
+  const [lessons, jieqi, tpl, dq] = await Promise.all([
     fetch("data/lessons.json").then((r) => r.json()),
     fetch("data/jieqi.json").then((r) => r.json()),
     fetch("../skill/prompt.md").then((r) => r.text()),
+    fetch("../skill/duanfa/daquan.json").then((r) => r.json()),
   ]);
   data = { lessons, jieqi: jieqiTable(jieqi) };
   template = tpl;
+  daquan = dq;
 }
 
 function init() {
@@ -37,7 +39,7 @@ function init() {
     try { current = castAt(utc, data); } catch (e) { return msg("m1", e.message); }
     current.q = { time: time.slice(0, 16), question, category: $("category").value, deadline };
     $("chart").textContent = chartText(current);
-    $("prompt").value = buildPrompt(template, current, question, deadline);
+    $("prompt").value = buildPrompt(template, current, question, deadline, daquan);
     $("s2").hidden = false;
     $("s2").scrollIntoView({ behavior: "smooth" });
   };
