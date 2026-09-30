@@ -4,7 +4,7 @@
 
 liuren-bench tests LLMs on Da Liu Ren (大六壬), a classical Chinese divination system: give the model a moment in time, have it cast the chart (Heaven–Earth plates, Four Lessons, Three Transmissions), and grade it item by item against a deterministic engine. It also doubles as a public scorebook for divination calls.
 
-Status: pre-alpha. Design docs only, no code yet.
+Status: pre-alpha. A draft casting engine is in `core/` and passes the 720-lesson consistency checks, but its rules have not yet been verified against classical sources (see [docs/rules.md](docs/rules.md), in Chinese). The benchmark itself hasn't started.
 
 ## Why Da Liu Ren
 

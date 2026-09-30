@@ -1,0 +1,16 @@
+[project]
+name = "liuren-core"
+version = "0.0.1"
+description = "大六壬起课引擎：日干支 + 月将 + 占时 → 课盘"
+requires-python = ">=3.10"
+license = "MIT"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["liuren_core"]
