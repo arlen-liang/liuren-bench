@@ -44,7 +44,7 @@ issue 一开，机器人就回复一条"已封存"：排好的课盘、引擎版
 
 ### 网页版和官方 skill：拉下来就能用
 
-网页版给用网页聊天的人：填上时间和问题，页面排好盘、生成一段提示词，粘进你常用的 AI，把回答粘回来，页面生成一个预填好的 issue 链接，点提交就行。
+[网页版](https://arlen-liang.github.io/liuren-bench/web/)给用网页聊天的人：填上时间和问题，页面排好盘、生成一段提示词，粘进你常用的 AI，把回答粘回来，页面生成一个预填好的 issue 链接，点提交就行。
 
 官方 skill（[skill/SKILL.md](skill/SKILL.md)）给用 Claude Code、opencode 这类 agent 的人。把本仓库拉下来，把 `skill/` 目录放进你的 agent 的 skill 目录（或者直接在仓库里让它读 SKILL.md），它就能起课、断课、交卷：
 
