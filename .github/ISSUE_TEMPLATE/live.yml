@@ -1,5 +1,5 @@
 name: 实占下注
-description: 不会用 git？在这里下注，维护者帮你转成 cases/live/ 里的文件。以 issue 创建时间为下注时间
+description: 在这里下注，维护者帮你转成 cases/live/ 里的文件。以 issue 创建时间为下注时间
 title: "[下注] 起课日期：占事一句话"
 labels: ["live-case"]
 body:
@@ -11,6 +11,8 @@ body:
         - label: 这是我自己的事；或者涉及别人，但别人看了认不出是谁
           required: true
         - label: 没有真名、单位名、具体地址，不涉及未成年人
+          required: true
+        - label: 内容我自己看过（由 AI 代填的也一样）
           required: true
         - label: 结果还没出来（出来了也能交，但会标"马后炮"，不进统计）
           required: true
@@ -28,6 +30,38 @@ body:
       description: 一句话，比如"本周五前能否收到面试回复"
     validations:
       required: true
+  - type: dropdown
+    id: judge_type
+    attributes:
+      label: 谁断的
+      options:
+        - 我自己
+        - AI
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: 模型（AI 断的必填）
+      description: 模型 ID 与版本，比如 claude-opus-5-5、deepseek-v4
+  - type: input
+    id: harness
+    attributes:
+      label: harness（AI 断的必填）
+      description: 在哪儿跑的，比如 claude-code 2.1、网页聊天、opencode 0.9
+  - type: input
+    id: skill
+    attributes:
+      label: skill 或提示词（AI 断的必填）
+      description: 比如 liuren-skill 0.1；没用 skill 就写提示词出处，或"无"
+  - type: dropdown
+    id: tools
+    attributes:
+      label: 能否调用工具（AI 断的必填）
+      options:
+        - 能（可跑代码或查资料）
+        - 不能
+        - 不适用（人断）
   - type: dropdown
     id: outcome
     attributes:
@@ -55,4 +89,4 @@ body:
     id: basis
     attributes:
       label: 依据（可选）
-      description: 课盘、断的理由，想写多少写多少
+      description: 课盘、断的理由，想写多少写多少。同一问题再加一家断语，在本 issue 下按同样的字段回复即可，回复时间就是那家的下注时间

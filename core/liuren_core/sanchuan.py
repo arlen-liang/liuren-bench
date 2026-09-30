@@ -62,13 +62,15 @@ def _chain(pan: Pan, chu: str) -> tuple:
 # ---- 涉害 ----
 
 def _shehai_depth(c: str, pan: Pan, being_ke: bool, school: School) -> int:
-    """从所临地盘顺数至本家（不含本家），数历经之克。
+    """从所临地盘前行至本家，数沿途之克；所临之位与本家都不计，地盘所寄之干计入。
 
+    依《六壬大全》卷七丁卯日例："亥加丑前行，历辰、戊、未、己、戌土位五重，归本家亥位"，
+    所临之丑虽为土亦不在数内。
     being_ke=True：候选被下所克（贼），数克它的；False：候选克下，数它所克的。
     """
     n = 0
     p = pan.down(c)
-    for k in range(pan.offset):
+    for k in range(1, pan.offset):
         q = shift(p, k)
         items = [q] + (GAN_ON_ZHI[q] if school.shehai_count_gan else [])
         n += sum(ke(x, c) if being_ke else ke(c, x) for x in items)

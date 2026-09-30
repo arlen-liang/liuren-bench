@@ -2,52 +2,59 @@
 
 [中文](README.md) | **English**
 
-liuren-bench tests LLMs on Da Liu Ren (大六壬), a classical Chinese divination system: give the model a moment in time, have it cast the chart (Heaven–Earth plates, Four Lessons, Three Transmissions), and grade it item by item against a deterministic engine. It also doubles as a public scorebook for divination calls.
+liuren-bench puts AI to work on Da Liu Ren (大六壬), a classical Chinese divination system: the AI casts a chart, makes a call, and the call is sealed until reality delivers the answer, all recorded in a public scorebook. What gets tested is not just the model, but the harness it runs in.
 
-Status: pre-alpha. A draft casting engine is in `core/` and passes the 720-lesson consistency checks, but its rules have not yet been verified against classical sources (see [docs/rules.md](docs/rules.md), in Chinese). The benchmark itself hasn't started.
+Status: pre-alpha. A draft casting engine is in `core/` and passes the 720-lesson consistency checks; its rules have been checked line by line against 《六壬大全》 (see [docs/rules.md](docs/rules.md), in Chinese). Live cases and the official skill haven't opened yet.
 
 ## Why Da Liu Ren
 
-Forget whether it "works" for a moment. Casting a chart is a long, fully specified rule chain: calendar conversion, stem-branch arithmetic, table lookups, then an ordered cascade of rules to derive the Three Transmissions. One wrong step breaks everything downstream, and per-item grading shows exactly where the model went off the rails.
+It is half fixed, half open. Casting the chart is pure computation: same moment, same school, same chart, so there is a ground truth. Reading the chart is judgement: weighing conflicting signals with no formula. The first half tests long-chain rule execution, the second tests decision-making under ambiguity. The rules and sources are all Chinese, much of it Classical Chinese.
 
-Same moment, same school, same chart, so there is a ground truth. Any moment is a fresh question, so the pool is unlimited and can't be memorised. The rules and sources are all Chinese, much of it Classical Chinese.
+## Who is being tested: the judge
 
-## Four tracks
+A judge is whoever makes a call: a person, or a *model + harness + skill* combination. The same model in a bare chat box and inside an agent harness that can run code and look things up may behave completely differently, so scores are kept per judge, not per model. Every AI call must declare the model ID and version, the harness name and version, the skill or prompt and its version, and whether tools were available.
 
-**Casting.** Given a moment, cast the chart. Closed-book (moment only) or open-book (full rule text supplied).
+## Tracks
 
-**Classical text.** Reading questions on source texts such as 課經 and 畢法賦, graded against cited passages.
+**Live cases: call it first, score it later.** This is the main event. Anyone can submit a real question in two steps: the time of casting, the question and a falsifiable call (yes/no, time window, confidence) *before* the outcome is known, then what actually happened. Calls can't be edited after submission; CI enforces it. Late submissions are accepted but flagged as hindsight and excluded from stats.
 
-**Judgement.** Classical cases with the original verdict hidden; the model gives its own. This measures agreement with the historical practitioner, not predictive accuracy.
+You don't need to know Da Liu Ren. Ask the question, let AI make the call, come back to report the outcome. Several AIs can call the same question, which makes it a head-to-head. Because calls are sealed before the outcome exists, no model can have seen the answer in training. The project takes no position on whether Da Liu Ren works. It just keeps score.
 
-**Live cases: call it first, score it later.** Anyone can submit their own reading in two steps: a PR with the chart, the question and a falsifiable call (yes/no, time window, confidence) *before* the outcome is known, then a second PR filling in what actually happened. Calls can't be edited after merge; CI enforces it. Late submissions are accepted but flagged as hindsight and excluded from stats. Humans and models can both attach calls to the same case. Because calls are sealed before the outcome exists, no model can have seen the answer in training.
+**Official skill.** The repo will ship a skill you install into your own AI. It casts the chart with `core/` so the fixed half isn't guessed, guides the model to a falsifiable call, fills in the judge declaration, and submits only after you confirm: via `gh` if available, otherwise as a prefilled issue link. Submissions go through your own GitHub account; there is no public API.
 
-The project takes no position on whether Da Liu Ren works. It just keeps score.
+**Casting.** Given a moment, cast the chart; graded item by item. Two leaderboards: bare (no tools) and agent (tools allowed, but no existing chart libraries, including this project's `core/`).
+
+**Classical text.** Reading questions on source texts such as 課經 and 畢法賦.
+
+**Judgement.** Classical cases with the original verdict hidden; measures agreement with the historical practitioner, not predictive accuracy.
 
 ## Layout
 
 ```
 core/           casting engine: time → chart (MIT)
-bench/          question generation, scoring, leaderboard (MIT)
+skill/          official skill: cast, call, submit (MIT, planned)
+bench/          question generation, scoring, leaderboards (MIT, planned)
 cases/
-  classical/    classical cases: chart + original verdict + source (CC-BY-4.0)
+  classical/    classical cases (CC-BY-4.0)
   live/         live cases, one file each, called then scored (CC-BY-4.0)
-docs/           methodology
+docs/           methodology, rule audit
 ```
 
 ## Roadmap
 
-M1 engine → live cases open → M2 casting track v0 → M3 classical cases and text track → M4 judgement track. Currently at M1. Live cases open early because outcomes take months to arrive. See [ROADMAP.md](ROADMAP.md) (in Chinese).
+M1 engine → M2 live cases and official skill → M3 casting track → M4 classical cases and text track → M5 judgement track. Currently at M1. See [ROADMAP.md](ROADMAP.md) (in Chinese).
 
 ## Contributing
 
-The maintainer can't read a Da Liu Ren chart, so engine correctness depends on charts recorded in classical texts. Most wanted: classical cases with complete charts, documented differences between schools, your own live calls, and bug reports. Live cases have strict privacy rules: your own affairs only, nothing that identifies a third party. See [CONTRIBUTING.md](CONTRIBUTING.md) (in Chinese).
+Most wanted: let your AI call a real question and come back to score it. People who can't read a chart are especially welcome. Also wanted: classical cases with complete charts, documented differences between schools, and bug reports. The maintainer can't read a chart either, so practitioners are doubly welcome. Live cases have strict privacy rules. See [CONTRIBUTING.md](CONTRIBUTING.md) (in Chinese).
 
 ## Known risks
 
-"Ground truth" is only true within one school. The default follows 《大六壬指南》 with known disagreements configurable; an unflagged disagreement will mark another school's correct answer as wrong.
+"Ground truth" is only true within one school. The engine follows 《六壬大全》, the one classic available in full text for line-by-line checking, with known disagreements configurable.
 
-Classical cases are survivor-biased (books recorded the hits) and famous ones may be in training data. Live cases fix the first problem but bring their own: people who bother to submit probably already lean towards believing in it.
+Judge declarations are self-reported and can't be verified. Stats are grouped by declaration and labelled as such.
+
+Classical cases are survivor-biased and famous ones may be in training data. Live cases fix the first problem but bring their own: people who bother to submit probably already lean towards believing in it.
 
 One-person side project, no schedule guarantees.
 

@@ -15,8 +15,9 @@ GUIREN_TABLES = {
 
 @dataclass(frozen=True)
 class School:
-    # 贵人口诀版本，见 GUIREN_TABLES。待核：《指南》用哪一版
-    guiren: str = "甲羊"
+    # 贵人口诀版本，见 GUIREN_TABLES。默认"甲牛"：《六壬大全》卷一、卷十一、卷十二注例的天将
+    # 只合此版；四库提要亦称其"尚沿俗例"。清廷《星历考原》主"甲羊"，作开关保留
+    guiren: str = "甲牛"
     # 昼夜分界："卯酉" 即卯至申为昼、酉至寅为夜
     daynight: str = "卯酉"
     # 涉害取法："count" 数克之深浅；"mengzhong" 直接取临孟、次临仲者
