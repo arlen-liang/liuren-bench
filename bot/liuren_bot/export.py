@@ -17,7 +17,8 @@ def _judge_key(v: dict) -> str:
     j = v["judge"]
     if j.get("human"):
         return f"human:{v['author']}"
-    return f"{j['model']} | {j['harness']} | {j['skill']} | tools={j['tools']}"
+    tools = {True: "可用工具", False: "无工具", None: "工具未报"}[j["tools"]]
+    return f"{j['model']} · {j['harness']} · {j['skill']} · {tools}"
 
 
 def build_case(issue: dict, comments: list[dict], today: date) -> dict | None:
@@ -98,9 +99,10 @@ def ledger_md(led: dict, today: date) -> str:
              f"案例 {led['cases']} 个，已开奖 {led['scored']} 个。"
              + ("" if led["rates_published"] else "回填满 30 条之前只计数，不算命中率。"), "",
              "AI 断者的信息全部自报，未经验证。", "", "## 断者", "", "| 断者 | 下注 | 已开奖 |", "|---|---|---|"]
+    cell = lambda x: str(x).replace("|", "\\|")      # 用户填的字段里可能有 |，会撑坏表格
     for k, v in sorted(led["judges"].items(), key=lambda x: -x[1]["calls"]):
-        lines.append(f"| {k} | {v['calls']} | {v['scored']} |")
+        lines.append(f"| {cell(k)} | {v['calls']} | {v['scored']} |")
     lines += ["", "## 提问人", "", "| 提问人 | 问题 | 已过截止日 | 已开奖 |", "|---|---|---|---|"]
     for k, v in sorted(led["owners"].items(), key=lambda x: -x[1]["questions"]):
-        lines.append(f"| @{k} | {v['questions']} | {v['due']} | {v['reported']} |")
+        lines.append(f"| @{cell(k)} | {v['questions']} | {v['due']} | {v['reported']} |")
     return "\n".join(lines) + "\n"

@@ -93,7 +93,7 @@ def bot(body):
 
 VERDICT = """```liuren-verdict
 judge:
-  model: deepseek-v4
+  model: deepseek|v4
   harness: 豆包网页
   skill: liuren-web 0.1
   tools: false
@@ -202,7 +202,11 @@ def test_ledger_counts_only():
     assert led["cases"] == 1 and led["scored"] == 1 and led["rates_published"] is False
     assert led["owners"]["alice"] == {"questions": 1, "due": 1, "reported": 1}
     assert len(led["judges"]) == 2
-    assert "只计数" in ledger_md(led, today)
+    md = ledger_md(led, today)
+    assert "只计数" in md
+    for line in md.splitlines():                 # 表格每行列数一致，没被用户字段撑坏
+        if line.startswith("| ") and "---" not in line:
+            assert line.replace("\\|", "").count("|") in (4, 5), line
 
 
 def test_hostile_text_is_just_data():
