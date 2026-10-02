@@ -1,0 +1,26 @@
+{
+ "cases": 2,
+ "scored": 0,
+ "judges": {
+  "claude-opus-5-5 · claude-code · 无（未用官方 skill，引《六壬大全》卷八铸印课条） · 可用工具": {
+   "calls": 1,
+   "scored": 0
+  },
+  "Kimi K3（Moonshot AI） · Kimi 网页 · liuren-prompt 0.1 · 无工具": {
+   "calls": 1,
+   "scored": 0
+  },
+  "claude-opus-5-5 · claude-code 2.1.285 · liuren-skill 0.1 · 可用工具": {
+   "calls": 1,
+   "scored": 0
+  }
+ },
+ "owners": {
+  "arlen-liang": {
+   "questions": 2,
+   "due": 0,
+   "reported": 0
+  }
+ },
+ "rates_published": false
+}
