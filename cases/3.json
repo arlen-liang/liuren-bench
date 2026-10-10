@@ -1,0 +1,152 @@
+{
+ "format": "liuren-live/1",
+ "id": 3,
+ "url": "https://github.com/arlen-liang/liuren-bench/issues/3",
+ "owner": "arlen-liang",
+ "question": "能否在 2026 年 11 月 1 日前获得律师执业许可",
+ "category": "工作",
+ "deadline": "2026-10-31",
+ "sealed_at": "2026-09-30 23:34:57",
+ "cast": {
+  "time": "2026-09-30 23:34",
+  "chart": {
+   "format": "liuren-chart/1",
+   "engine": "liuren-core 0.1.0",
+   "input": {
+    "day": "戊申",
+    "month_general": "辰",
+    "hour": "子"
+   },
+   "school": {
+    "guiren": "甲牛",
+    "daynight": "卯酉",
+    "shehai": "count",
+    "shehai_count_gan": true,
+    "zishi": "子初",
+    "true_solar": false
+   },
+   "plate": {
+    "子": "辰",
+    "丑": "巳",
+    "寅": "午",
+    "卯": "未",
+    "辰": "申",
+    "巳": "酉",
+    "午": "戌",
+    "未": "亥",
+    "申": "子",
+    "酉": "丑",
+    "戌": "寅",
+    "亥": "卯"
+   },
+   "generals": {
+    "子": "玄",
+    "丑": "阴",
+    "寅": "后",
+    "卯": "贵",
+    "辰": "蛇",
+    "巳": "雀",
+    "午": "合",
+    "未": "勾",
+    "申": "龙",
+    "酉": "空",
+    "戌": "虎",
+    "亥": "常"
+   },
+   "noble": {
+    "period": "夜",
+    "direction": "顺"
+   },
+   "lessons": [
+    {
+     "up": "酉",
+     "down": "戊",
+     "general": "雀"
+    },
+    {
+     "up": "丑",
+     "down": "酉",
+     "general": "空"
+    },
+    {
+     "up": "子",
+     "down": "申",
+     "general": "龙"
+    },
+    {
+     "up": "辰",
+     "down": "子",
+     "general": "玄"
+    }
+   ],
+   "method": {
+    "gate": "贼克",
+    "name": "元首"
+   },
+   "transmissions": [
+    {
+     "branch": "辰",
+     "general": "玄",
+     "kin": "兄",
+     "void": false
+    },
+    {
+     "branch": "申",
+     "general": "蛇",
+     "kin": "子",
+     "void": false
+    },
+    {
+     "branch": "子",
+     "general": "龙",
+     "kin": "财",
+     "void": false
+    }
+   ],
+   "void": [
+    "寅",
+    "卯"
+   ],
+   "time": {
+    "beijing": "2026-09-30 23:34:00",
+    "local": "2026-09-30 23:34:00",
+    "true_solar": false,
+    "longitude": null,
+    "year": "丙午",
+    "month": "丁酉",
+    "day": "戊申",
+    "hour": "子",
+    "month_general": "辰",
+    "solar_term": {
+     "name": "秋分",
+     "at": "2026-09-23 08:05:09"
+    }
+   }
+  }
+ },
+ "flags": [],
+ "verdicts": [
+  {
+   "sealed_at": "2026-09-30 23:34:57",
+   "source": "issue",
+   "author": "arlen-liang",
+   "judge": {
+    "model": "claude-opus-5-5",
+    "harness": "claude-code 2.1.285",
+    "skill": "liuren-skill 0.1",
+    "tools": true
+   },
+   "complete": true,
+   "outcome": "不成",
+   "window": null,
+   "confidence": 0.6,
+   "basis": "元首课本主官职首擢，但求官以官星为用：戊日官星寅卯不入课传且落旬空，秋令木死；干上酉子孙乘朱雀剥官，初传辰乘玄武（玄武条'其为事多浮泛难成'），中传申子孙乘螣蛇，正合《订讹》'得凶神恶将，三传不顺……未可执一'。三传辰申子合财局而非官局，一月之内难成。",
+   "judge_key": "claude-opus-5-5 · claude-code 2.1.285 · liuren-skill 0.1 · 可用工具",
+   "self_reported": true,
+   "hindsight": false,
+   "falsifiable": true
+  }
+ ],
+ "result": null,
+ "status": "待开奖"
+}
