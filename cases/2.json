@@ -1,0 +1,172 @@
+{
+ "format": "liuren-live/1",
+ "id": 2,
+ "url": "https://github.com/arlen-liang/liuren-bench/issues/2",
+ "owner": "arlen-liang",
+ "question": "2027 年 2 月加州律师考试能否一次通过（以 2027 年 5 月底前公布的成绩为准；未能参加也算不成）",
+ "category": "考试",
+ "deadline": "2027-05-31",
+ "sealed_at": "2026-09-30 22:54:49",
+ "cast": {
+  "time": "2026-09-30 22:52",
+  "chart": {
+   "format": "liuren-chart/1",
+   "engine": "liuren-core 0.1.0",
+   "input": {
+    "day": "丁未",
+    "month_general": "辰",
+    "hour": "亥"
+   },
+   "school": {
+    "guiren": "甲牛",
+    "daynight": "卯酉",
+    "shehai": "count",
+    "shehai_count_gan": true,
+    "zishi": "子初",
+    "true_solar": false
+   },
+   "plate": {
+    "子": "巳",
+    "丑": "午",
+    "寅": "未",
+    "卯": "申",
+    "辰": "酉",
+    "巳": "戌",
+    "午": "亥",
+    "未": "子",
+    "申": "丑",
+    "酉": "寅",
+    "戌": "卯",
+    "亥": "辰"
+   },
+   "generals": {
+    "子": "常",
+    "丑": "玄",
+    "寅": "阴",
+    "卯": "后",
+    "辰": "贵",
+    "巳": "蛇",
+    "午": "雀",
+    "未": "合",
+    "申": "勾",
+    "酉": "龙",
+    "戌": "空",
+    "亥": "虎"
+   },
+   "noble": {
+    "period": "夜",
+    "direction": "顺"
+   },
+   "lessons": [
+    {
+     "up": "子",
+     "down": "丁",
+     "general": "合"
+    },
+    {
+     "up": "巳",
+     "down": "子",
+     "general": "常"
+    },
+    {
+     "up": "子",
+     "down": "未",
+     "general": "合"
+    },
+    {
+     "up": "巳",
+     "down": "子",
+     "general": "常"
+    }
+   ],
+   "method": {
+    "gate": "比用",
+    "name": "知一"
+   },
+   "transmissions": [
+    {
+     "branch": "巳",
+     "general": "常",
+     "kin": "兄",
+     "void": false
+    },
+    {
+     "branch": "戌",
+     "general": "蛇",
+     "kin": "子",
+     "void": false
+    },
+    {
+     "branch": "卯",
+     "general": "空",
+     "kin": "父",
+     "void": true
+    }
+   ],
+   "void": [
+    "寅",
+    "卯"
+   ],
+   "time": {
+    "beijing": "2026-09-30 22:52:00",
+    "local": "2026-09-30 22:52:00",
+    "true_solar": false,
+    "longitude": null,
+    "year": "丙午",
+    "month": "丁酉",
+    "day": "丁未",
+    "hour": "亥",
+    "month_general": "辰",
+    "solar_term": {
+     "name": "秋分",
+     "at": "2026-09-23 08:05:09"
+    }
+   }
+  }
+ },
+ "flags": [],
+ "verdicts": [
+  {
+   "sealed_at": "2026-09-30 22:54:49",
+   "source": "issue",
+   "author": "arlen-liang",
+   "judge": {
+    "model": "claude-opus-5-5",
+    "harness": "claude-code",
+    "skill": "无（未用官方 skill，引《六壬大全》卷八铸印课条）",
+    "tools": true
+   },
+   "complete": true,
+   "outcome": "不成",
+   "window": null,
+   "confidence": 0.6,
+   "basis": "三传巳戌卯，铸印乘轩课。《六壬大全》卷八：\"占科举、求官爵……主官爵高迁，所求遂意\"，丁未日在其所列诸日之内；初传巳为日支驿马，干上子为官星乘六合，本是功名吉课。但末传卯落旬空（本旬寅卯空），又乘天空，正合原书\"戌卯或值空亡，则为破印损模，官必不迁\"；原书又称此课\"多主事成迟晚\"。断一次通过不成，迟后可成。另记：初传巳对应巳月（2027-05-06 至 06-05），约为放榜之时。",
+   "judge_key": "claude-opus-5-5 · claude-code · 无（未用官方 skill，引《六壬大全》卷八铸印课条） · 可用工具",
+   "self_reported": true,
+   "hindsight": false,
+   "falsifiable": true
+  },
+  {
+   "sealed_at": "2026-09-30 23:20:10",
+   "source": "comment:5914253454",
+   "author": "arlen-liang",
+   "judge": {
+    "model": "Kimi K3（Moonshot AI）",
+    "harness": "Kimi 网页",
+    "skill": "liuren-prompt 0.1",
+    "tools": false
+   },
+   "complete": true,
+   "outcome": "不成",
+   "window": null,
+   "confidence": 0.7,
+   "basis": "末传父母（文书成绩类神）旬空又乘天空，中传日墓螣蛇、子孙剥官；初传驿马太常主赴考虽成行，成绩终落空，故断不成。",
+   "judge_key": "Kimi K3（Moonshot AI） · Kimi 网页 · liuren-prompt 0.1 · 无工具",
+   "self_reported": true,
+   "hindsight": false,
+   "falsifiable": true
+  }
+ ],
+ "result": null,
+ "status": "待开奖"
+}
